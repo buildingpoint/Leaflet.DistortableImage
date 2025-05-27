@@ -63,7 +63,13 @@ L.EditHandle = L.Marker.extend({
       dragend: this._onHandleDragEnd,
     }, this);
 
-    this._handled._map.off('zoomend', this.updateHandle, this);
+    // ngx-leaflet is removing layers from the map before the handles, so this._handled._map is undefined
+    if (this._handled._map) {
+      this._handled._map.off('zoomend', this.updateHandle, this);
+    } else if (this._map) {
+      this._map.off('zoomend', this.updateHandle, this);
+    }
+    // this._handled._map.off('zoomend', this.updateHandle, this);
     this._handled.off('update', this.updateHandle, this);
   },
 
